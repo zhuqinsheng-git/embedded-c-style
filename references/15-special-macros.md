@@ -4,14 +4,14 @@
 
 ```c
 // 将函数放置到特定段
-#define aw_section(x) __attribute__((section(x)))
+#define ul_section(x) __attribute__((section(x)))
 
 // 将代码放置到 RAM 中执行（提高性能）
-#define aw_ram_code_section(func) \
+#define ul_ram_code_section(func) \
         __attribute__((section(".ram_code"), used, noinline))
 
 // 使用示例
-aw_ram_code_section(critical_func)
+ul_ram_code_section(critical_func)
 void critical_func(void)
 {
         // 高性能要求的代码
@@ -30,7 +30,7 @@ void critical_func(void)
 #endif
 
 // 使用示例
-if (likely(ret == AW_OK)) {
+if (likely(ret == UL_OK)) {
         // 经常执行的路径
 }
 
@@ -42,21 +42,21 @@ if (unlikely(error)) {
 ### 15.3 废弃警告
 
 ```c
-#define aw_compiler_deprecated(msg) \
+#define ul_compiler_deprecated(msg) \
         __attribute__ ((deprecated(msg)))
 
 // 使用示例
-aw_compiler_deprecated("Use awb_new_function instead")
+ul_compiler_deprecated("Use ulb_new_function instead")
 void old_function(void);
 ```
 
 ### 15.4 内存对齐
 
 ```c
-#define aw_compiler_align(align) __attribute__((aligned(align)))
+#define ul_compiler_align(align) __attribute__((aligned(align)))
 
 // 使用示例
-struct aw_compiler_align(16) aligned_struct {
+struct ul_compiler_align(16) aligned_struct {
         uint8_t data[16];
 };
 ```

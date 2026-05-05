@@ -1,14 +1,14 @@
 ---
 name: c-code-style
-description: AWorks C 语言编码规范 - 基于 Linux Kernel Coding Style 的嵌入式 C 编码规范，覆盖文件头、命名、注释、格式、内存管理等完整编码约定
+description: zhuqinsheng C 语言编码规范 - 基于 Linux Kernel Coding Style 的嵌入式 C 编码规范，覆盖文件头、命名、注释、格式、内存管理等完整编码约定
 ---
 
-# AWorks C 语言编码规范
+# zhuqinsheng C 语言编码规范
 
 > **版本**: 2.0  
-> **适用框架**: AWorks LP (Low Power) Framework  
+> **适用框架**: zhuqinsheng Embedded Framework  
 > **最后更新**: 2026-04-09  
-> **参考标准**: Linux Kernel Coding Style + AWorks 框架特性
+> **参考标准**: Linux Kernel Coding Style + zhuqinsheng 框架特性
 
 本规范分为以下章节，可根据需要查阅对应文件：
 
@@ -18,7 +18,7 @@ description: AWorks C 语言编码规范 - 基于 Linux Kernel Coding Style 的�
 |------|------|------|
 | 1. 文件头规范 | 版权头、功能说明头、简要说明头 | [references/01-file-header.md](references/01-file-header.md) |
 | 2. 命名规范 | 类型、变量、函数、宏的命名规则 | [references/02-naming-conventions.md](references/02-naming-conventions.md) |
-| 3. 关键字修饰符 | aw_local、aw_const、aw_inline 等 | [references/03-keyword-modifiers.md](references/03-keyword-modifiers.md) |
+| 3. 关键字修饰符 | ul_local、ul_const、ul_inline 等 | [references/03-keyword-modifiers.md](references/03-keyword-modifiers.md) |
 | 4. 注释规范 | Doxygen 风格、函数/结构体注释 | [references/04-comment-conventions.md](references/04-comment-conventions.md) |
 | 5. 代码格式规范 | 缩进、行长、大括号、空格 | [references/05-code-format.md](references/05-code-format.md) |
 | 6. 头文件保护 | #ifndef / #define / #endif 格式 | [references/06-header-guards.md](references/06-header-guards.md) |
@@ -40,7 +40,7 @@ description: AWorks C 语言编码规范 - 基于 Linux Kernel Coding Style 的�
 ## 参考资料
 
 - [Linux Kernel Coding Style](https://www.kernel.org/doc/html/latest/process/coding-style.html)
-- AWorks LP Framework Documentation
+- zhuqinsheng Embedded Framework Documentation
 - Doxygen Manual: https://www.doxygen.nl/manual/
 - MISRA C Guidelines (参考)
 
@@ -50,9 +50,8 @@ description: AWorks C 语言编码规范 - 基于 Linux Kernel Coding Style 的�
 
 | 版本 | 日期 | 作者 | 说明 |
 |------|------|------|------|
-| 1.0 | 2026-04-09 | AI Assistant | 初始版本，基于 AWorks LP 0.8.32 |
-| 2.0 | 2026-04-09 | AI Assistant | 整合 Linux 内核编码风格，优先采用 Linux 标准 |
+| 0.1 | 2026-05-05 | zhuqinsheng | 初始版本 |
 
 ---
 
-**© 2001-present Guangzhou ZHIYUAN Electronics Co., Ltd. All rights reserved.**
+**© 2026-present zhuqinsheng. All rights reserved.**

@@ -10,7 +10,7 @@
 *                       ----------------------------
 *                       embedded software development
 *
-* Copyright (c) 2024-present zhuqinsheng
+* Copyright (c) 2026-present zhuqinsheng
 * ALL rights reserved.
 *******************************************************************************/
 ```

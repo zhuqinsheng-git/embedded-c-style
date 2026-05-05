@@ -5,16 +5,16 @@
 每个子系统独立目录，遵循统一结构：
 
 ```
-subsys/aw_subsys_driver_serial/
+subsys/ul_subsys_driver_serial/
 ├── Kconfig.opts          # 配置选项
 ├── component.json        # 组件描述
 ├── doc/                  # 文档
 │   ├── serial_api.md
 │   └── examples/
 ├── include/              # 公开头文件
-│   └── awb_serial.h
+│   └── ulb_serial.h
 └── source/               # 源代码
-    └── awb_serial.c
+    └── ulb_serial.c
 ```
 
 ### 17.2 分层架构
@@ -43,15 +43,15 @@ subsys/aw_subsys_driver_serial/
 
 ```c
 // 串口 ioctl 命令
-#define AW_IOCTL_SERIAL_DCB_GET         0x01
-#define AW_IOCTL_SERIAL_DCB_SET         0x02
-#define AW_IOCTL_SERIAL_TIMEOUT_GET     0x03
-#define AW_IOCTL_SERIAL_TIMEOUT_SET     0x04
-#define AW_IOCTL_SERIAL_FLUSH           0x05
-#define AW_IOCTL_SERIAL_DRAIN           0x06
+#define UL_IOCTL_SERIAL_DCB_GET         0x01
+#define UL_IOCTL_SERIAL_DCB_SET         0x02
+#define UL_IOCTL_SERIAL_TIMEOUT_GET     0x03
+#define UL_IOCTL_SERIAL_TIMEOUT_SET     0x04
+#define UL_IOCTL_SERIAL_FLUSH           0x05
+#define UL_IOCTL_SERIAL_DRAIN           0x06
 
 // 统一调用方式
-aw_err_t ret = ioctl(fd, AW_IOCTL_SERIAL_DCB_SET, &dcb);
+ul_err_t ret = ioctl(fd, UL_IOCTL_SERIAL_DCB_SET, &dcb);
 ```
 
 ### 17.5 设备树集成
@@ -59,10 +59,10 @@ aw_err_t ret = ioctl(fd, AW_IOCTL_SERIAL_DCB_SET, &dcb);
 驱动通过 YAML 绑定文件描述，自动生成配置代码：
 
 ```yaml
-# awb_spidev.yaml
-title: AWBus-Lite SPI Bus Device
+# ulb_spidev.yaml
+title: ULBus-Lite SPI Bus Device
 inherits:
-    !include awb_device.yaml
+    !include ulb_device.yaml
 
 parent:
     bus: spi

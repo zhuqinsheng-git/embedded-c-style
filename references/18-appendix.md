@@ -4,27 +4,27 @@
 
 | 类别 | 规范 | 示例 |
 |------|------|------|
-| **类型定义** | `xxx_t` 后缀 | awb_dev_t, `aw_err_t` |
+| **类型定义** | `xxx_t` 后缀 | ulb_dev_t, `ul_err_t` |
 | **指针变量** | `p_` 前缀 | p_dev, p_drvname, p_devinfo |
 | **全局变量** | `__g_` 前缀 | `__g_eeprom_0_dev` |
 | **局部变量** | 小写+下划线，简短 | `ret`, `cmd`, `i`, `tmp` |
-| **公开函数** | `模块_功能` | `awb_serial_open`, `awb_plb_init` |
-| **内部函数** | `__` 或完整前缀 | `__aw_serial_ioctl` |
+| **公开函数** | `模块_功能` | `ulb_serial_open`, `ulb_plb_init` |
+| **内部函数** | `__` 或完整前缀 | `__ul_serial_ioctl` |
 | **函数指针类型** | `pfn_xxx_t` | `pfn_driver_match_t` |
-| **宏常量** | 全大写+模块前缀 | AWB_BUS_TYPE_ID_I2C, AW_OK |
-| **配置宏** | `CONFIG_XXX` | `CONFIG_AWB_SERIAL_HAS_WRITE_BUF` |
+| **宏常量** | 全大写+模块前缀 | ULB_BUS_TYPE_ID_I2C, UL_OK |
+| **配置宏** | `CONFIG_XXX` | `CONFIG_ULB_SERIAL_HAS_WRITE_BUF` |
 
 ### B. 关键字修饰符速查
 
 | 关键字 | 含义 | 等价于 | 使用场景 |
 |--------|------|--------|----------|
-| aw_local | 本地静态 | `static` | 内部函数、静态变量 |
-| aw_const | 常量 | `const` | 只读数据、常量指针 |
-| aw_inline | 内联 | `inline` | 小函数优化（≤3行） |
-| `aw_static_inline` | 静态内联 | `static inline` | 头文件中的辅助函数 |
-| `aw_static_always_inline` | 强制内联 | `__attribute__((always_inline))` | 性能关键代码 |
-| aw_import | 外部导入 | `extern` | 声明外部变量 |
-| aw_export | 外部导出 | `extern` | 导出全局符号 |
+| ul_local | 本地静态 | `static` | 内部函数、静态变量 |
+| ul_const | 常量 | `const` | 只读数据、常量指针 |
+| ul_inline | 内联 | `inline` | 小函数优化（≤3行） |
+| `ul_static_inline` | 静态内联 | `static inline` | 头文件中的辅助函数 |
+| `ul_static_always_inline` | 强制内联 | `__attribute__((always_inline))` | 性能关键代码 |
+| ul_import | 外部导入 | `extern` | 声明外部变量 |
+| ul_export | 外部导出 | `extern` | 导出全局符号 |
 
 ### C. 注释标签速查
 
@@ -35,46 +35,46 @@
 | `\param[out]` | 输出参数 | `\param[out] p_result 结果` |
 | `\param[in,out]` | 输入输出参数 | `\param[in,out] p_buf 缓冲区` |
 | `\return` | 返回值说明 | `\return 错误码` |
-| `\retval` | 具体返回值 | `\retval AW_OK 成功` |
+| `\retval` | 具体返回值 | `\retval UL_OK 成功` |
 | `\par` | 段落标题 | `\par 示例` |
 | `\code` | 代码块开始 | `\code ... \endcode` |
 | `\endcode` | 代码块结束 | - |
 | `\internal` | 内部说明 | 修改历史等 |
-| `\file` | 文件说明 | `\file awb_serial.c` |
+| `\file` | 文件说明 | `\file ulb_serial.c` |
 
 ### D. 常见错误码
 
 | 错误码 | 值 | 含义 |
 |--------|-----|------|
-| AW_OK | 0 | 成功 |
-| `-AW_EPERM` | -1 | 不允许的操作 |
-| `-AW_ENOENT` | -2 | 没有这样的文件或目录 |
-| `-AW_EINTR` | -4 | 中断的系统调用 |
-| `-AW_EIO` | -5 | I/O 错误 |
-| `-AW_EAGAIN` | -11 | 资源暂时不可用 |
-| `-AW_ENOMEM` | -12 | 内存不足 |
-| `-AW_EACCES` | -13 | 权限拒绝 |
-| `-AW_EFAULT` | -14 | 错误的地址 |
-| `-AW_EBUSY` | -16 | 设备或资源忙 |
-| `-AW_EEXIST` | -17 | 文件已存在 |
-| `-AW_ENODEV` | -19 | 没有这样的设备 |
-| `-AW_EINVAL` | -22 | 无效参数 |
-| `-AW_ENOTSUP` | -95 | 不支持的操作 |
+| UL_OK | 0 | 成功 |
+| `-UL_EPERM` | -1 | 不允许的操作 |
+| `-UL_ENOENT` | -2 | 没有这样的文件或目录 |
+| `-UL_EINTR` | -4 | 中断的系统调用 |
+| `-UL_EIO` | -5 | I/O 错误 |
+| `-UL_EAGAIN` | -11 | 资源暂时不可用 |
+| `-UL_ENOMEM` | -12 | 内存不足 |
+| `-UL_EACCES` | -13 | 权限拒绝 |
+| `-UL_EFAULT` | -14 | 错误的地址 |
+| `-UL_EBUSY` | -16 | 设备或资源忙 |
+| `-UL_EEXIST` | -17 | 文件已存在 |
+| `-UL_ENODEV` | -19 | 没有这样的设备 |
+| `-UL_EINVAL` | -22 | 无效参数 |
+| `-UL_ENOTSUP` | -95 | 不支持的操作 |
 
 ### E. 总线类型 ID
 
 | 总线类型 | ID | 说明 |
 |----------|-----|------|
-| AWB_BUS_TYPE_ID_PLB | 1 | 处理器本地总线 |
-| AWB_BUS_TYPE_ID_I2C | 20 | I2C 总线 |
-| AWB_BUS_TYPE_ID_SPI | 21 | SPI 总线 |
-| AWB_BUS_TYPE_ID_SDIO | 22 | SDIO 总线 |
-| AWB_BUS_TYPE_ID_MII | 23 | MII 总线 |
-| AWB_BUS_TYPE_ID_USBH | 24 | USB Host 总线 |
-| AWB_BUS_TYPE_ID_DISPLAY | 26 | 显示器总线 |
-| AWB_BUS_TYPE_ID_FLASH | 27 | Flash 总线 |
-| AWB_BUS_TYPE_ID_CAM | 29 | Camera 总线 |
-| AWB_BUS_TYPE_ID_HWTIMER | 30 | 硬件定时器总线 |
+| ULB_BUS_TYPE_ID_PLB | 1 | 处理器本地总线 |
+| ULB_BUS_TYPE_ID_I2C | 20 | I2C 总线 |
+| ULB_BUS_TYPE_ID_SPI | 21 | SPI 总线 |
+| ULB_BUS_TYPE_ID_SDIO | 22 | SDIO 总线 |
+| ULB_BUS_TYPE_ID_MII | 23 | MII 总线 |
+| ULB_BUS_TYPE_ID_USBH | 24 | USB Host 总线 |
+| ULB_BUS_TYPE_ID_DISPLAY | 26 | 显示器总线 |
+| ULB_BUS_TYPE_ID_FLASH | 27 | Flash 总线 |
+| ULB_BUS_TYPE_ID_CAM | 29 | Camera 总线 |
+| ULB_BUS_TYPE_ID_HWTIMER | 30 | 硬件定时器总线 |
 
 ### F. 代码格式要点速查
 

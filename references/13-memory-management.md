@@ -2,14 +2,14 @@
 
 ### 13.1 静态分配
 
-使用 aw_local 标记本地静态变量：
+使用 ul_local 标记本地静态变量：
 
 ```c
 // 设备实例静态分配
-aw_local struct awb_ep24cxx_dev __g_eeprom_0_dev;
+ul_local struct ulb_ep24cxx_dev __g_eeprom_0_dev;
 
 // 设备信息常量
-aw_local aw_const struct awb_ep24cxx_devinfo __g_eeprom_0_devinfo = {
+ul_local ul_const struct ulb_ep24cxx_devinfo __g_eeprom_0_devinfo = {
         0x50,           /* I2C从机地址 */
         EP24C02,        /* 芯片型号 */
 };

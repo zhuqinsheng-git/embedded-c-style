@@ -6,11 +6,11 @@
 
 ```c
 // 头文件中
-typedef struct awb_dev awb_dev_t;  // 前向声明
-struct awb_dev;                     // 不完整类型
+typedef struct ulb_dev ulb_dev_t;  // 前向声明
+struct ulb_dev;                     // 不完整类型
 
 // 使用者只能操作指针，无法访问内部成员
-aw_err_t awb_dev_init(awb_dev_t *p_dev);
+ul_err_t ulb_dev_init(ulb_dev_t *p_dev);
 ```
 
 ### 10.2 函数指针封装
@@ -18,16 +18,16 @@ aw_err_t awb_dev_init(awb_dev_t *p_dev);
 将操作封装到结构体中，实现面向对象的设计：
 
 ```c
-typedef struct awb_dev_drvinfo {
-        uint8_t     awb_ver;
+typedef struct ulb_dev_drvinfo {
+        uint8_t     ulb_ver;
         uint8_t     bus_type_id;
         char       *p_drvname;
         
         // 函数指针
-        aw_err_t (*probe) (awb_dev_t *p_dev);
-        aw_err_t (*remove) (awb_dev_t *p_dev);
-        awb_dev_pm_ops_t pm_ops;
-} awb_dev_drvinfo_t;
+        ul_err_t (*probe) (ulb_dev_t *p_dev);
+        ul_err_t (*remove) (ulb_dev_t *p_dev);
+        ulb_dev_pm_ops_t pm_ops;
+} ulb_dev_drvinfo_t;
 ```
 
 ### 10.3 链表节点
@@ -40,9 +40,9 @@ typedef struct _rtk_list_node {
         struct _rtk_list_node *prev;
 } rtk_list_node_t;
 
-struct awb_dev {
-        struct aw_list_head bus_dev_list_node;  // 链表节点
-        struct awb_dev *p_parent;               // 父设备
+struct ulb_dev {
+        struct ul_list_head bus_dev_list_node;  // 链表节点
+        struct ulb_dev *p_parent;               // 父设备
         // ...
 };
 ```

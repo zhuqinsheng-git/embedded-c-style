@@ -49,9 +49,9 @@ default:
 
 ```c
 // ✅ 正确：参数换行对齐
-aw_err_t awb_register_dev_driver(
-        awb_dev_driver_registration_t *p_dev_driver_regist,
-        const awb_dev_drvinfo_t *p_drvinfo)
+ul_err_t ulb_register_dev_driver(
+        ulb_dev_driver_registration_t *p_dev_driver_regist,
+        const ulb_dev_drvinfo_t *p_drvinfo)
 {
     // ...
 }
@@ -194,10 +194,10 @@ obj.member
 
 ```c
 // ✅ 正确：包含参数名
-aw_err_t awb_serial_open(awb_dev_t *p_dev);
+ul_err_t ulb_serial_open(ulb_dev_t *p_dev);
 
 // ❌ 错误：缺少参数名
-aw_err_t awb_serial_open(awb_dev_t *);
+ul_err_t ulb_serial_open(ulb_dev_t *);
 ```
 
 **不要在函数声明中使用 `extern`**（多余且使行变长）
