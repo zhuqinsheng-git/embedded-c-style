@@ -5,9 +5,9 @@ description: zhuqinsheng C 语言编码规范 - 基于 Linux Kernel Coding Style
 
 # zhuqinsheng C 语言编码规范
 
-> **版本**: 2.0  
+> **版本**: 0.1  
 > **适用框架**: zhuqinsheng Embedded Framework  
-> **最后更新**: 2026-04-09  
+> **最后更新**: 2026-05-05  
 > **参考标准**: Linux Kernel Coding Style + zhuqinsheng 框架特性
 
 本规范分为以下章节，可根据需要查阅对应文件：
