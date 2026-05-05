@@ -1,5 +1,5 @@
 ---
-name: c-code-style
+name: embedded-c-style
 description: zhuqinsheng C 语言编码规范 - 基于 Linux Kernel Coding Style 的嵌入式 C 编码规范，覆盖文件头、命名、注释、格式、内存管理等完整编码约定
 ---
 
