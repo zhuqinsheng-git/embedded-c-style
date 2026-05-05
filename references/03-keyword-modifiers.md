@@ -1,5 +1,7 @@
 ## 3. 关键字修饰符
 
+> **速览**: `ul_local`(static)、`ul_const`(const)、`ul_inline`(inline)、`ul_import`(extern)、`ul_export`(extern) — 统一关键字别名用于跨编译器兼容
+
 zhuqinsheng 定义了一套统一的关键字别名，用于跨编译器兼容：
 
 ### 3.1 基本修饰符

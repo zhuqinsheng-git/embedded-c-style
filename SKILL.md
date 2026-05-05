@@ -40,7 +40,6 @@ description: zhuqinsheng C 语言编码规范 - 基于 Linux Kernel Coding Style
 ## 参考资料
 
 - [Linux Kernel Coding Style](https://www.kernel.org/doc/html/latest/process/coding-style.html)
-- zhuqinsheng Embedded Framework Documentation
 - Doxygen Manual: https://www.doxygen.nl/manual/
 - MISRA C Guidelines (参考)
 

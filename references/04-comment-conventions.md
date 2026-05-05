@@ -1,5 +1,7 @@
 ## 4. 注释规范
 
+> **速览**: Doxygen 风格；多行注释用 Linux 内核 `/* ... */` 风格；结构体成员用 `/**< \brief */`；函数注释含 `\param`、`\return`、`\retval`；注释解释 what 而非 how
+
 ### 4.1 Doxygen 风格
 
 zhuqinsheng 使用 Doxygen 风格的注释，支持自动生成文档。

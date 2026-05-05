@@ -1,5 +1,7 @@
 ## 2. 命名规范
 
+> **速览**: 类型 `xxx_t` 后缀；指针 `p_` 前缀；全局 `__g_` 前缀；函数 `模块_功能` 格式；宏全大写+模块前缀；禁止匈牙利命名法
+
 ### 2.1 类型定义命名
 
 使用 `typedef struct xxx xxx_t` 格式，结构体标签和 typedef 名称保持一致：
@@ -10,7 +12,7 @@ typedef struct ulb_bus_type_info ulb_bus_type_info_t;
 typedef struct ul_serial_dcb ul_serial_dcb_t;
 ```
 
-**注意**：避免使用类似 `vps_t` 这样不透明的 typedef，除非符合第 9 章的规则。
+**注意**：避免使用类似 `vps_t` 这样不透明的 typedef，除非符合[第 9 章 Typedef 使用规范](09-typedef-usage.md)的规则。
 
 ### 2.2 变量命名
 

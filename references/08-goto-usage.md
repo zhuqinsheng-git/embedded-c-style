@@ -1,5 +1,7 @@
 ## 8. 集中的函数退出路径（goto 使用）
 
+> **速览**: 需要资源清理时推荐用 goto；标签名用有含义的名称（`out_free_buffer`、`err_free_foo`）；避免单一 `err` 标签；不需要清理时直接 return
+
 **Linux 内核强烈推荐在需要清理时使用 goto**。
 
 ### 8.1 为什么使用 goto

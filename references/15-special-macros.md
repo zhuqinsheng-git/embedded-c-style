@@ -1,5 +1,7 @@
 ## 15. 特殊宏定义
 
+> **速览**: `ul_section()` 段属性；`ul_ram_code_section()` RAM执行；`likely()/unlikely()` 分支预测；`ul_compiler_deprecated()` 废弃警告；`ul_compiler_align()` 内存对齐
+
 ### 15.1 段属性
 
 ```c
