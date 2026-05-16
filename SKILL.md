@@ -1,56 +1,95 @@
 ---
 name: embedded-c-style
-description: zhuqinsheng C 语言编码规范 - 基于 Linux Kernel Coding Style 的嵌入式 C 编码规范，覆盖文件头、命名、注释、格式、内存管理等完整编码约定
+description: Embedded C coding conventions based on Linux Kernel Coding Style. Use when writing, reviewing, or refactoring C code for embedded systems. Covers naming, formatting, comments, error handling, and data structures.
 ---
 
-# zhuqinsheng C 语言编码规范
+# Embedded C Coding Style
 
-> **版本**: 0.1  
-> **适用框架**: zhuqinsheng Embedded Framework  
-> **最后更新**: 2026-05-05  
-> **参考标准**: Linux Kernel Coding Style + zhuqinsheng 框架特性
+Based on Linux Kernel Coding Style. All rules in [references/](references/) directory.
 
-本规范分为以下章节，可根据需要查阅对应文件：
+## Core Rules
 
-## 章节索引
+### Indentation & Braces
 
-| 章节 | 内容 | 文件 |
-|------|------|------|
-| 1. 文件头规范 | 版权头、功能说明头、简要说明头 | [references/01-file-header.md](references/01-file-header.md) |
-| 2. 命名规范 | 类型、变量、函数、宏的命名规则 | [references/02-naming-conventions.md](references/02-naming-conventions.md) |
-| 3. 关键字修饰符 | ul_local、ul_const、ul_inline 等 | [references/03-keyword-modifiers.md](references/03-keyword-modifiers.md) |
-| 4. 注释规范 | Doxygen 风格、函数/结构体注释 | [references/04-comment-conventions.md](references/04-comment-conventions.md) |
-| 5. 代码格式规范 | 缩进、行长、大括号、空格 | [references/05-code-format.md](references/05-code-format.md) |
-| 6. 头文件保护 | #ifndef / #define / #endif 格式 | [references/06-header-guards.md](references/06-header-guards.md) |
-| 7. 错误处理规范 | 错误码、返回值约定、断言 | [references/07-error-handling.md](references/07-error-handling.md) |
-| 8. 集中的函数退出路径（goto 使用） | goto 使用模式与标签命名 | [references/08-goto-usage.md](references/08-goto-usage.md) |
-| 9. Typedef 使用规范 | typedef 允许/禁止的情形 | [references/09-typedef-usage.md](references/09-typedef-usage.md) |
-| 10. 数据结构设计 | 不透明指针、链表、引用计数 | [references/10-data-structure-design.md](references/10-data-structure-design.md) |
-| 11. 函数设计规范 | 函数长度、内联、返回值 | [references/11-function-design.md](references/11-function-design.md) |
-| 12. 布尔类型使用 | bool 使用规则与优化 | [references/12-boolean-type-usage.md](references/12-boolean-type-usage.md) |
-| 13. 内存管理约定 | 静态分配、动态分配 | [references/13-memory-management.md](references/13-memory-management.md) |
-| 14. 条件编译规范 | #ifdef 替代方案、IS_ENABLED | [references/14-conditional-compilation.md](references/14-conditional-compilation.md) |
-| 15. 特殊宏定义 | 段属性、分支预测、废弃警告 | [references/15-special-macros.md](references/15-special-macros.md) |
-| 16. 打印内核消息 | printk、dev_err、pr_debug | [references/16-printing-kernel-messages.md](references/16-printing-kernel-messages.md) |
-| 17. 代码组织原则 | 目录结构、分层架构、设备树 | [references/17-code-organization.md](references/17-code-organization.md) |
-| A. 附录：快速参考表 | 命名/修饰符/注释/错误码要点速查 | [references/18-appendix.md](references/18-appendix.md) |
+- **8-char tabs**, not 4 spaces
+- **80 columns** max
+- **Allman braces**: opening brace on its own line for all blocks (if/switch/for/while/functions)
+- Single statements: no braces
 
----
+```c
+if (condition)
+{
+        do_something();
+}
 
-## 参考资料
+int function(int x)
+{
+        return x + 1;
+}
+```
 
-- [Linux Kernel Coding Style](https://www.kernel.org/doc/html/latest/process/coding-style.html)
-- Doxygen Manual: https://www.doxygen.nl/manual/
-- MISRA C Guidelines (参考)
+### Naming
 
----
+| Category | Rule | Example |
+|----------|------|---------|
+| Types | `xxx_t` suffix | `serial_dev_t` |
+| Pointers | `p_` prefix | `p_dev`, `p_name` |
+| Globals | `g_` prefix | `g_count` |
+| Internal functions | `__` prefix | `__serial_ioctl` |
+| Macros | ALL_CAPS | `SERIAL_MAX_PORTS` |
 
-## 修订历史
+### Error Handling
 
-| 版本 | 日期 | 作者 | 说明 |
-|------|------|------|------|
-| 0.1 | 2026-05-05 | zhuqinsheng | 初始版本 |
+- Action functions: return `int` (0=success, negative=error)
+- Predicate functions: return `bool` or `int` (non-zero=true)
+- Use standard errno: `-EINVAL`, `-ENOMEM`, `-EBUSY`
+- Multi-resource cleanup: use goto with descriptive labels
 
----
+```c
+static int __driver_init(driver_t *p_drv)
+{
+        p_drv->p_buf = malloc(sizeof(*p_drv->p_buf));
+        if (!p_drv->p_buf)
+                return -ENOMEM;
 
-**© 2026-present zhuqinsheng. All rights reserved.**
+        int ret = register_device(p_drv);
+        if (ret != 0)
+                goto err_free_buf;
+
+        return 0;
+
+err_free_buf:
+        free(p_drv->p_buf);
+        return ret;
+}
+```
+
+### Comments
+
+- Doxygen style: `\brief`, `\param[in]`, `\return`, `\retval`
+- Struct members: `/**< \brief description */`
+- Explain **what**, not **how**
+
+### Typedef
+
+Don't typedef structs. Use `struct xxx` directly. Only typedef for:
+- Opaque types (hide implementation)
+- Integer abstraction (`uint32_t`)
+
+### Memory
+
+- `malloc(sizeof(*p))` not `malloc(sizeof(struct my_struct))`
+- Don't cast `void *` return
+
+## Reference Files
+
+| Chapter | Topic | File |
+|---------|-------|------|
+| 1 | File Header | [01-file-header.md](references/01-file-header.md) |
+| 2 | Naming | [02-naming-conventions.md](references/02-naming-conventions.md) |
+| 3 | Format | [03-code-format.md](references/03-code-format.md) |
+| 4 | Comments | [04-comment-conventions.md](references/04-comment-conventions.md) |
+| 5 | Error Handling | [05-error-handling.md](references/05-error-handling.md) |
+| 6 | Typedef & Structs | [06-typedef-and-struct.md](references/06-typedef-and-struct.md) |
+| 7 | Misc | [07-misc.md](references/07-misc.md) |
+| A | Appendix | [A-appendix.md](references/A-appendix.md) |

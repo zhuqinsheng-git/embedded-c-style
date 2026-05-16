@@ -1,48 +1,54 @@
-## 1. 文件头规范
+## 1. File Header Specification
 
-> **速览**: 每个源文件需包含标准版权头；.c 文件加功能说明头（含修改历史）；.h 文件可用简要说明头
+> **Summary**: Each source file should contain a copyright header; .c files add a function description header (with modification history); .h files can use a brief description header
 
-### 1.1 标准版权头
+### 1.1 Standard Copyright Header
 
-每个源文件必须包含标准的版权声明和许可信息：
+Each source file should contain a copyright notice and license:
 
 ```c
-/*******************************************************************************
-*                             zhuqinsheng
-*                       ----------------------------
-*                       embedded software development
-*
-* Copyright (c) 2026-present zhuqinsheng
-* ALL rights reserved.
-*******************************************************************************/
+/**
+ * Copyright (c) 2026 Your Name
+ * SPDX-License-Identifier: MIT
+ */
 ```
 
-### 1.2 功能说明头（.c 文件）
+Or a more complete format:
 
-实现文件需要添加功能说明和修改历史：
+```c
+/*
+ * Copyright (c) 2026 Your Name
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the MIT License.
+ */
+```
+
+### 1.2 Function Description Header (.c files)
+
+Implementation files should add function description and modification history:
 
 ```c
 /**
  * \file
- * \brief 串口通讯标准接口
+ * \brief Serial communication standard interface
  *
  * \internal
  * \par modification history
- * - 1.00 12-10-30  orz, first implementation
- * - 1.00 15-06-20  deo, add ul_serdev_remove
- * -      18-10-15  hsg, add ul_serdev operate instead of ul_tydev operate
+ * - 1.00 26-05-16  zqs, first implementation
+ * - 1.01 26-06-01  zqs, add DMA support
  * \endinternal
  */
 ```
 
-### 1.3 简要说明头（.h 文件）
+### 1.3 Brief Description Header (.h files)
 
-头文件可以简化为：
+Header files can be simplified:
 
 ```c
 /**
  * \file
- * \brief zhuqinsheng general data type defines
+ * \brief Common data type definitions
  *
  * \internal
  * \par modification history:

@@ -1,14 +1,14 @@
-## 4. 注释规范
+## 4. Comment Conventions
 
-> **速览**: Doxygen 风格；多行注释用 Linux 内核 `/* ... */` 风格；结构体成员用 `/**< \brief */`；函数注释含 `\param`、`\return`、`\retval`；注释解释 what 而非 how
+> **Summary**: Doxygen style; multi-line comments use Linux kernel `/* ... */` style; struct members use `/**< \brief */`; function comments include `\param`, `\return`, `\retval`; comments explain what not how
 
-### 4.1 Doxygen 风格
+### 4.1 Doxygen Style
 
-zhuqinsheng 使用 Doxygen 风格的注释，支持自动生成文档。
+Use Doxygen-style comments for documentation generation.
 
-### 4.2 多行注释首选风格
+### 4.2 Multi-line Comment Style
 
-**采用 Linux 内核风格**：
+**Use Linux kernel style**:
 
 ```c
 /*
@@ -21,100 +21,81 @@ zhuqinsheng 使用 Doxygen 风格的注释，支持自动生成文档。
  */
 ```
 
-或者也可以使用：
+Or Doxygen style:
 
 ```c
 /**
- * \brief 添加引用子设备
+ * \brief Add a reference child device
  *
- * \param[in] p_ref_parent_dev  引用父设备
- * \param[in] p_dev             子设备
- * \param[out] p_ref_child_des  引用子设备描述
- * \return 错误码
- * \retval UL_OK 成功
- * \retval -UL_EINVAL 参数无效
+ * \param[in] p_parent  parent device
+ * \param[in] p_dev     child device
+ * \param[out] p_desc   reference child descriptor
+ * \return error code
+ * \retval 0    success
+ * \retval -1   invalid parameter
  *
- * \par 示例
+ * \par Example
  * \code
- * ulb_dev_t *parent_dev = ...;
- * ulb_dev_t *child_dev = ...;
- * ul_err_t ret = ulb_dev_add_ref_child(parent_dev, child_dev, NULL);
+ * serial_dev_t *p_parent = ...;
+ * serial_dev_t *p_child = ...;
+ * int ret = dev_add_ref_child(p_parent, p_child, NULL);
  * \endcode
  */
 ```
 
-### 4.3 结构体成员注释
+### 4.3 Struct Member Comments
 
-使用 `/**< \brief 说明 */` 格式：
+Use `/**< \brief description */` format:
 
 ```c
-struct ulb_devhcf {
-    const char         *p_driver_name;     /**< \brief 设备驱动名 */
-    uint8_t             unit;              /**< \brief 设备单元号 */
-    uint8_t             bus_type_id;       /**< \brief 设备所处总线的类型 */
-    
-    /**< \brief 这个设备是否创建总线
-     *
-     * 需要注意的是，不是所有设备都依赖这个标志，例如USB host就始终会创建总线
-     * 而串口是否创建总线就依赖于这个标志
-     */
-    uint8_t             is_create_bus;
-    
-    struct ulb_dev     *p_dev;             /**< \brief 指向设备实例内存 */
-    ul_const void      *p_devinfo;         /**< \brief 指向设备信息(常量) */
+struct serial_dev
+{
+        const char         *p_name;       /**< \brief device name */
+        uint8_t             unit;         /**< \brief device unit number */
+        int                 baudrate;     /**< \brief baud rate */
+        void               *p_drv_data;   /**< \brief driver private data */
 };
 ```
 
-### 4.4 函数注释
+### 4.4 Function Comments
 
-#### 完整函数文档
+#### Full Function Documentation
 
 ```c
 /**
- * \brief 添加引用子设备
+ * \brief Open a serial device
  *
- * \param[in] p_ref_parent_dev  引用父设备
- * \param[in] p_dev             子设备
- * \param[out] p_ref_child_des  引用子设备描述
- * \return 错误码
- * \retval UL_OK 成功
- * \retval -UL_EINVAL 参数无效
- *
- * \par 示例
- * \code
- * ulb_dev_t *parent_dev = ...;
- * ulb_dev_t *child_dev = ...;
- * ul_err_t ret = ulb_dev_add_ref_child(parent_dev, child_dev, NULL);
- * \endcode
+ * \param[in] p_dev  device handle
+ * \param[in] flags  open flags
+ * \return error code
+ * \retval 0    success
+ * \retval -1   device busy
+ * \retval -2   invalid parameter
  */
-ul_err_t ulb_dev_add_ref_child(
-        ulb_dev_t *p_ref_parent_dev,
-        ulb_dev_t *p_dev,
-        struct ulb_dev_ref_child_des *p_ref_child_des);
+int serial_open(serial_dev_t *p_dev, int flags);
 ```
 
-#### 简化函数文档
+#### Simplified Function Documentation
 
 ```c
 /**
- * \brief 初始化链表节点
+ * \brief Initialize list node
  *
- * an list node must init before add it to a list
- * \param[in] list_node     a node to init
- * \retval 无
+ * A list node must be initialized before adding to a list.
+ * \param[in] p_node  node to initialize
  */
-static ul_inline void rtk_list_node_init(rtk_list_node_t *list_node)
+static inline void list_init(struct list_node *p_node)
 {
-    list_node->next = list_node;
-    list_node->prev = list_node;
+        p_node->next = p_node;
+        p_node->prev = p_node;
 }
 ```
 
-### 4.5 注释原则
+### 4.5 Comment Principles
 
-**Linux 风格强调**：
-- 注释应该解释**做什么**（what），而不是**怎么做**（how）
-- 不要注释显而易见的代码
-- 如果函数复杂到需要内部注释，说明函数太长，应该拆分
-- 在函数头部注释其功能和原因
-- 注释数据声明，每行只声明一个数据
+**Linux style emphasizes**:
+- Comments should explain **what** (not **how**)
+- Don't comment obvious code
+- If a function is complex enough to need internal comments, it's too long — split it
+- Comment the function's purpose and reason at its head
+- Comment data declarations, one per line
