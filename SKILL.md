@@ -32,7 +32,8 @@ int function(int x)
 
 | Category | Rule | Example |
 |----------|------|---------|
-| Types | `xxx_t` suffix | `serial_dev_t` |
+| Structs | `struct xxx` (no typedef) | `struct serial_dev` |
+| Opaque types | `xxx_t` (typedef allowed) | `pte_t` |
 | Pointers | `p_` prefix | `p_dev`, `p_name` |
 | Globals | `g_` prefix | `g_count` |
 | Internal functions | `__` prefix | `__serial_ioctl` |
@@ -72,7 +73,7 @@ err_free_buf:
 
 ### Typedef
 
-Don't typedef structs. Use `struct xxx` directly. Only typedef for:
+Don't typedef structs — use `struct xxx` directly. Only typedef for:
 - Opaque types (hide implementation)
 - Integer abstraction (`uint32_t`)
 
@@ -92,4 +93,3 @@ Don't typedef structs. Use `struct xxx` directly. Only typedef for:
 | 5 | Error Handling | [05-error-handling.md](references/05-error-handling.md) |
 | 6 | Typedef & Structs | [06-typedef-and-struct.md](references/06-typedef-and-struct.md) |
 | 7 | Misc | [07-misc.md](references/07-misc.md) |
-| A | Appendix | [A-appendix.md](references/A-appendix.md) |

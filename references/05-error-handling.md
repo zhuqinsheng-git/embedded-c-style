@@ -1,95 +1,34 @@
-## 7. Error Handling Conventions
+## 5. Error Handling Conventions
 
-> **Summary**: Action functions return error codes (0=success, negative=error); predicate functions return boolean (non-zero=true, 0=false); use standard errno values
+> **Summary**: Action functions return error codes (0=success, negative=error); predicate functions return boolean (non-zero=true, 0=false); use standard errno values; multi-resource cleanup uses goto.
 
-### 7.1 Return Value Convention
+### 5.1 Return Value Convention
 
-**Linux style important rule**:
-
-> If the function name is an **action or command**, return an error code integer (0=success, -Exxx=failure)
-> If the function name is a **predicate**, return a boolean (non-zero=true, 0=false)
-
-**Examples**:
+- **Action/command functions** → return `int` (0=success, -Exxx=failure)
+- **Predicate functions** → return `bool` or `int` (non-zero=true, 0=false)
+- **Mixing these two patterns is a source of bugs!**
 
 ```c
-/* Command function: returns error code */
 int work_queue_add(struct work_struct *p_work);  /* 0=success, -EBUSY=failure */
-
-/* Predicate function: returns boolean */
 int pci_dev_present(struct pci_dev *p_dev);      /* 1=found, 0=not found */
 ```
 
-**Mixing these two patterns is a source of bugs!**
+### 5.2 Common Error Codes
 
-### 7.2 Common Error Codes
-
-Use standard errno values:
-
-| Error Code | Value | Meaning |
-|------------|-------|---------|
+| Error | Value | Meaning |
+|-------|-------|---------|
 | 0 | 0 | Success |
-| -EPERM | -1 | Operation not permitted |
-| -ENOENT | -2 | No such file or directory |
+| -EPERM | -1 | Not permitted |
+| -ENOENT | -2 | No such file |
 | -EIO | -5 | I/O error |
-| -EAGAIN | -11 | Resource temporarily unavailable |
 | -ENOMEM | -12 | Out of memory |
 | -EACCES | -13 | Permission denied |
-| -EBUSY | -16 | Device or resource busy |
-| -EEXIST | -17 | File already exists |
+| -EBUSY | -16 | Resource busy |
 | -EINVAL | -22 | Invalid argument |
-| -ENOSYS | -38 | Function not implemented |
 
-### 7.3 Error Handling Patterns
+### 5.3 Goto Cleanup Pattern
 
-#### Immediate Return
-
-```c
-static int __serial_drain_buffer(serial_dev_t *p_dev)
-{
-        int ret;
-
-        if (p_dev->has_write_buf)
-        {
-                ret = sem_wait(&p_dev->tx_sem);
-                if (ret != 0)
-                        return ret;
-        }
-
-        return 0;
-}
-```
-
-#### Cleanup Before Return (goto pattern)
-
-```c
-static int __serial_ioctl(serial_dev_t *p_dev, int cmd, void *p_arg)
-{
-        int ret;
-
-        ret = mutex_lock(&p_dev->lock);
-        if (ret != 0)
-                return ret;
-
-        switch (cmd)
-        {
-        case IOCTL_SET_BAUDRATE:
-                ret = __set_baudrate(p_dev, *(int *)p_arg);
-                break;
-        default:
-                ret = -ENOTSUP;
-                break;
-        }
-
-        mutex_unlock(&p_dev->lock);
-        return ret;
-}
-```
-
-When there are multiple resources to release, use goto for centralized cleanup.
-
-**Why goto**: unconditional jumps are easy to trace, reduce nesting, and prevent forgetting cleanup on error paths.
-
-**Label naming**: use descriptive names (`err_free_buf`, `out_release`), not `err1`/`err2`.
+For multiple resources, use goto for centralized cleanup. Labels should be descriptive (`err_free_buf`, not `err1`).
 
 ```c
 static int __driver_init(driver_t *p_drv)
@@ -98,10 +37,7 @@ static int __driver_init(driver_t *p_drv)
 
         p_drv->p_buf = malloc(BUF_SIZE);
         if (!p_drv->p_buf)
-        {
-                ret = -ENOMEM;
-                goto err_out;
-        }
+                return -ENOMEM;
 
         ret = register_device(p_drv);
         if (ret != 0)
@@ -117,19 +53,18 @@ err_unregister:
         unregister_device(p_drv);
 err_free_buf:
         free(p_drv->p_buf);
-err_out:
         return ret;
 }
 ```
 
-### 7.4 Assertions and Checks
+**Why goto**: unconditional jumps reduce nesting, are easy to trace, and prevent forgetting cleanup.
+
+### 5.4 Parameter Validation
 
 ```c
-/* Parameter validation */
 if (!p_dev || !p_drvinfo)
         return -EINVAL;
 
-/* State check */
 if (p_dev->state != DEV_STATE_READY)
         return -EBUSY;
 ```

@@ -1,10 +1,8 @@
 ## 1. File Header Specification
 
-> **Summary**: Each source file should contain a copyright header; .c files add a function description header (with modification history); .h files can use a brief description header
+> **Summary**: Each source file needs a copyright header; .c files add a function description header with modification history; .h files use a brief version.
 
-### 1.1 Standard Copyright Header
-
-Each source file should contain a copyright notice and license:
+### 1.1 Copyright Header
 
 ```c
 /**
@@ -13,20 +11,7 @@ Each source file should contain a copyright notice and license:
  */
 ```
 
-Or a more complete format:
-
-```c
-/*
- * Copyright (c) 2026 Your Name
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the MIT License.
- */
-```
-
 ### 1.2 Function Description Header (.c files)
-
-Implementation files should add function description and modification history:
 
 ```c
 /**
@@ -43,7 +28,7 @@ Implementation files should add function description and modification history:
 
 ### 1.3 Brief Description Header (.h files)
 
-Header files can be simplified:
+Same format, empty modification history:
 
 ```c
 /**

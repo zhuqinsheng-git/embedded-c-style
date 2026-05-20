@@ -17,7 +17,6 @@ A Claude Code skill defining embedded C coding conventions based on the Linux Ke
 | 5 | Error Handling | [references/05-error-handling.md](references/05-error-handling.md) |
 | 6 | Typedef & Data Structures | [references/06-typedef-and-struct.md](references/06-typedef-and-struct.md) |
 | 7 | Miscellaneous | [references/07-misc.md](references/07-misc.md) |
-| A | Appendix | [references/A-appendix.md](references/A-appendix.md) |
 
 ## License
 

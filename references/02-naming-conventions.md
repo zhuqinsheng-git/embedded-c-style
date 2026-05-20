@@ -1,20 +1,22 @@
-## 2. 命名规范
+## 2. Naming Conventions
 
-> **速览**: 类型 `xxx_t` 后缀；指针 `p_` 前缀；全局 `g_` 前缀；函数 `模块_功能` 格式；宏全大写+模块前缀；禁止匈牙利命名法
+> **Summary**: Types use `xxx_t` suffix; pointers use `p_` prefix; globals use `g_` prefix; functions use `module_action` format; macros are UPPER_CASE with module prefix; Hungarian notation is forbidden.
 
-### 2.1 类型定义命名
+### 2.1 Struct Naming
 
-使用 `typedef struct xxx xxx_t` 格式，结构体标签和 typedef 名称保持一致：
+Use `struct xxx` directly (no typedef). Exception: opaque types may use `typedef struct xxx xxx_t` to hide implementation.
 
 ```c
-typedef struct serial_dev serial_dev_t;
-typedef struct serial_dcb serial_dcb_t;
+/* Normal: no typedef */
+struct serial_dev dev;
+
+/* Opaque: typedef allowed */
+typedef struct pte_struct pte_t;  /* access only via functions */
 ```
 
-### 2.2 变量命名
+### 2.2 Variable Naming
 
-#### 指针变量
-使用前缀 `p_` 表示指针：
+**Pointers** — prefix with `p_`:
 
 ```c
 serial_dev_t *p_dev;
@@ -22,43 +24,39 @@ const char *p_drvname;
 void *p_data;
 ```
 
-#### 局部变量
-使用小写字母 + 下划线分隔，保持简短：
+**Locals** — lowercase + underscores, keep short:
 
 ```c
 int ret = 0;
 uint32_t cmd;
-int i;              /* 循环计数器 */
-char *tmp;          /* 临时变量 */
+int i;              /* loop counter */
+char *tmp;          /* temporary */
 ```
 
-**Linux 风格建议**：本地变量名应该简短且能表达相关含义。如果怕混淆，说明函数太复杂了，应该拆分。
+> **Linux style tip**: Local names should be short and descriptive. If you fear confusion, the function is too complex — split it.
 
-#### 全局变量
-使用 `g_` 前缀：
+**Globals** — prefix with `g_`:
 
 ```c
 static int g_device_count;
 static const char *g_default_path = "/dev/ttyS0";
 ```
 
-#### 结构体成员
-根据类型选择合适的前缀：
+**Struct members** — same rules (pointer prefix `p_`, others lowercase):
 
 ```c
 struct serial_dev
 {
-        const char         *p_name;       /* 指针用 p_ */
-        uint8_t             unit;         /* 普通变量小写 */
+        const char         *p_name;
+        uint8_t             unit;
         int                 baudrate;
-        void               *p_drv_data;   /* 指针用 p_ */
+        void               *p_drv_data;
 };
 ```
 
-### 2.3 函数命名
+### 2.3 Function Naming
 
-#### 公开 API 函数
-使用 `模块_功能` 格式，全小写 + 下划线：
+**Public API** — `module_action`, all lowercase + underscores:
 
 ```c
 int serial_open(serial_dev_t *p_dev);
@@ -66,61 +64,48 @@ void serial_init(void);
 int serial_register_driver(const serial_drv_t *p_drv);
 ```
 
-#### 内部静态函数
-使用前缀 `__`：
+**Internal static functions** — prefix with `__`:
 
 ```c
 static int __serial_ioctl(serial_dev_t *p_dev, int cmd, void *arg);
-static int __serial_drain_buffer(serial_dev_t *p_dev);
 ```
 
-#### 回调函数指针类型
-使用 `pfn_` 前缀 + `_t` 后缀：
+**Callback function pointer types** — `pfn_` prefix + `_t` suffix:
 
 ```c
 typedef int (*pfn_serial_write_t)(serial_dev_t *p_dev,
         const void *p_buf, size_t len);
 ```
 
-### 2.4 宏定义命名
+### 2.4 Macro Naming
 
-#### 常量宏
-全大写 + 下划线，带模块前缀：
+**Constants** — UPPER_CASE + underscores, with module prefix:
 
 ```c
 #define SERIAL_FLAG_NONBLOCK    (1 << 0)
 #define SERIAL_MAX_PORTS        8
 ```
 
-#### 功能性宏
-全大写，带模块前缀：
+**Utility macros** — UPPER_CASE, with module prefix:
 
 ```c
 #define SERIAL_OFFSET(structure, member) \
         ((size_t)(&(((structure *)0)->member)))
 
-#define SERIAL_CONTAINER_OF(ptr, type, member) \
-        ((type *)((char *)(ptr) - SERIAL_OFFSET(type, member)))
-
 #define ARRAY_SIZE(ar) (sizeof(ar) / sizeof((ar)[0]))
 ```
 
-**Linux 风格建议**：优先使用已有的宏，不要重新发明。例如：
-- 使用 `ARRAY_SIZE(x)` 而不是自己定义
-- 使用 `min()` 和 `max()` 宏（带类型检查）
+> **Linux style tip**: Prefer existing macros (`ARRAY_SIZE`, `min`, `max`) over reinventing them.
 
-#### 配置宏
-使用 `CONFIG_` 前缀：
+**Config macros** — `CONFIG_` prefix:
 
 ```c
 #if CONFIG_SERIAL_HAS_DMA
-        /* DMA 相关代码 */
+        /* DMA related code */
 #endif
 ```
 
-### 2.5 命名禁忌
+### 2.5 Naming Don'ts
 
-- **禁止匈牙利命名法**：不要在变量名中包含类型信息（如 `iCount`, `pName`），编译器知道类型
-- **全局变量必须有描述性名字**：不能叫 `foo`、`tmp` 等无意义名称
-- **避免 master/slave、blacklist/whitelist**：
-  - 推荐替换为：`primary/secondary`、`leader/follower`、`denylist/allowlist`
+- **No Hungarian notation** — don't encode types in names (`iCount`, `pName`); the compiler knows the type.
+- **Globals must be descriptive** — no `foo`, `tmp`, or other meaningless names.

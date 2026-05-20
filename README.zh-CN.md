@@ -17,7 +17,6 @@
 | 5 | 错误处理 | [references/05-error-handling.md](references/05-error-handling.md) |
 | 6 | Typedef 与数据结构 | [references/06-typedef-and-struct.md](references/06-typedef-and-struct.md) |
 | 7 | 杂项 | [references/07-misc.md](references/07-misc.md) |
-| A | 附录 | [references/A-appendix.md](references/A-appendix.md) |
 
 ## 许可证
 
