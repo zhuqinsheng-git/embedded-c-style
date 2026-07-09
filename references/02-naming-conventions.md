@@ -19,7 +19,7 @@ typedef struct pte_struct pte_t;  /* access only via functions */
 **Pointers** — prefix with `p_`:
 
 ```c
-serial_dev_t *p_dev;
+struct serial_dev *p_dev;
 const char *p_drvname;
 void *p_data;
 ```
@@ -59,21 +59,23 @@ struct serial_dev
 **Public API** — `module_action`, all lowercase + underscores:
 
 ```c
-int serial_open(serial_dev_t *p_dev);
+int serial_open(struct serial_dev *p_dev);
 void serial_init(void);
-int serial_register_driver(const serial_drv_t *p_drv);
+int serial_register_driver(const struct serial_drv *p_drv);
 ```
+
+**Internal functions and file-scope variables — must be `static`.** If it's not in the header, the linker shouldn't see it.
 
 **Internal static functions** — prefix with `__`:
 
 ```c
-static int __serial_ioctl(serial_dev_t *p_dev, int cmd, void *arg);
+static int __serial_ioctl(struct serial_dev *p_dev, int cmd, void *arg);
 ```
 
 **Callback function pointer types** — `pfn_` prefix + `_t` suffix:
 
 ```c
-typedef int (*pfn_serial_write_t)(serial_dev_t *p_dev,
+typedef int (*pfn_serial_write_t)(struct serial_dev *p_dev,
         const void *p_buf, size_t len);
 ```
 

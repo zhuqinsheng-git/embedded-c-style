@@ -28,7 +28,7 @@ Doxygen style with full parameter documentation:
  * \retval -1   device busy
  * \retval -2   invalid parameter
  */
-int serial_open(serial_dev_t *p_dev, int flags);
+int serial_open(struct serial_dev *p_dev, int flags);
 ```
 
 ### 4.3 Struct Member Comments

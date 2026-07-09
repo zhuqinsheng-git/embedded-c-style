@@ -17,6 +17,8 @@
 | 5 | 错误处理 | [references/05-error-handling.md](references/05-error-handling.md) |
 | 6 | Typedef 与数据结构 | [references/06-typedef-and-struct.md](references/06-typedef-and-struct.md) |
 | 7 | 杂项 | [references/07-misc.md](references/07-misc.md) |
+| 8 | 可测性 | [references/08-testability.md](references/08-testability.md) |
+| 示例 | 完整示例（头文件/实现/测试） | [references/example/](references/example/) |
 
 ## 许可证
 

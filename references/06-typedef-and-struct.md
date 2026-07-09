@@ -56,3 +56,40 @@ int retry_count;  /**< \brief retry count */
 /* Bad */
 int timeout, retry_count;
 ```
+
+### 6.6 Header File Design
+
+A header is the module's public contract. Someone who has never seen your `.c` should be able to read the `.h` and know how to use the module.
+
+**Self-contained** — the header must compile on its own. Include everything it needs to compile:
+
+```c
+/* sensor.h — reads a temperature sensor over I2C */
+
+#include <stdint.h>       /* uint8_t, int16_t — this header needs them */
+#include <stdbool.h>      /* bool — this header uses it */
+
+struct i2c_bus;           /* forward declare — we only use pointers */
+
+/* public types */
+typedef enum {
+        SENSOR_OK          = 0,
+        SENSOR_ERR_TIMEOUT = 1,
+        SENSOR_ERR_CRC     = 2,
+} sensor_err_t;
+
+/* public API */
+int  sensor_init(struct i2c_bus *bus, uint8_t addr);
+int  sensor_read_temp(struct i2c_bus *bus, int16_t *temp_out);
+bool sensor_is_ready(struct i2c_bus *bus);
+```
+
+**Minimal includes** — only include what the *header itself* needs. If the `.c` needs `<string.h>`, include it in the `.c`, not the header.
+
+**Forward declare** — if you only use a pointer to a type, don't include its full header:
+
+```c
+struct i2c_bus;  /* enough — no need to #include "i2c.h" */
+```
+
+**Structure** — types and enums at the top, function declarations below, no implementation details:

@@ -1,30 +1,39 @@
 ## 5. Error Handling Conventions
 
-> **Summary**: Action functions return error codes (0=success, negative=error); predicate functions return boolean (non-zero=true, 0=false); use standard errno values; multi-resource cleanup uses goto.
+> **Summary**: Action functions return error codes (0=success, non-zero=error); predicate functions return boolean (non-zero=true, 0=false); define semantic errors in a module-level enum; multi-resource cleanup uses goto.
 
 ### 5.1 Return Value Convention
 
-- **Action/command functions** → return `int` (0=success, -Exxx=failure)
+- **Action/command functions** → return `int` (0=success, non-zero=error code)
 - **Predicate functions** → return `bool` or `int` (non-zero=true, 0=false)
 - **Mixing these two patterns is a source of bugs!**
 
 ```c
-int work_queue_add(struct work_struct *p_work);  /* 0=success, -EBUSY=failure */
+int work_queue_add(struct work_struct *p_work);  /* 0=success, >0=error code */
 int pci_dev_present(struct pci_dev *p_dev);      /* 1=found, 0=not found */
 ```
 
-### 5.2 Common Error Codes
+### 5.2 Error Codes
 
-| Error | Value | Meaning |
-|-------|-------|---------|
-| 0 | 0 | Success |
-| -EPERM | -1 | Not permitted |
-| -ENOENT | -2 | No such file |
-| -EIO | -5 | I/O error |
-| -ENOMEM | -12 | Out of memory |
-| -EACCES | -13 | Permission denied |
-| -EBUSY | -16 | Resource busy |
-| -EINVAL | -22 | Invalid argument |
+Use a module-level enum for semantic errors. Use plain negative numbers for generic failures (invalid args, allocation failure).
+
+```c
+/* module.h — semantic errors for this module */
+typedef enum
+{
+        XXX_OK           = 0,
+        XXX_ERR_TIMEOUT  = 1,
+        XXX_ERR_CRC      = 2,
+        XXX_ERR_BUS      = 3,
+} xxx_err_t;
+```
+
+| Return | Meaning |
+|--------|---------|
+| 0 | Success |
+| 1+ | Module-specific error (see enum) |
+| -1 | Invalid parameter |
+| -2 | Allocation failure |
 
 ### 5.3 Goto Cleanup Pattern
 
@@ -37,7 +46,7 @@ static int __driver_init(driver_t *p_drv)
 
         p_drv->p_buf = malloc(BUF_SIZE);
         if (!p_drv->p_buf)
-                return -ENOMEM;
+                return -2;
 
         ret = register_device(p_drv);
         if (ret != 0)
@@ -63,8 +72,8 @@ err_free_buf:
 
 ```c
 if (!p_dev || !p_drvinfo)
-        return -EINVAL;
+        return -1;
 
 if (p_dev->state != DEV_STATE_READY)
-        return -EBUSY;
+        return XXX_ERR_TIMEOUT;
 ```

@@ -37,3 +37,30 @@ if (unlikely(error)) { /* rarely executed path */ }
 #define compiler_align(align) __attribute__((aligned(align)))
 #define section(x)            __attribute__((section(x)))
 ```
+
+### 7.5 Portability
+
+**Use `stdint.h` types — never bare `int` or `long` when size matters.**
+
+```c
+/* bad — size varies across platforms */
+int count;          /* 16-bit on AVR, 32-bit on ARM, who knows */
+long timestamp;     /* 32-bit on Windows x64, 64-bit on Linux x64 */
+
+/* good — size is explicit */
+int32_t count;      /* always 32 bits */
+uint64_t timestamp; /* always 64 bits, unsigned */
+uint8_t  addr;      /* always 8 bits — common for Modbus/register values */
+```
+
+**Don't cast pointer to int.**
+
+```c
+/* bad — breaks on 64-bit systems where pointer is 8 bytes, int is 4 */
+int addr = (int)ptr;
+
+/* good */
+uintptr_t addr = (uintptr_t)ptr;  /* uintptr_t is guaranteed to hold a pointer */
+```
+
+`int` is fine for loop counters, return codes, and small ranges where size doesn't matter. Use sized types for everything that touches memory layout, protocols, or hardware registers.

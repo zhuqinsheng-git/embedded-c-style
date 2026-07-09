@@ -1,6 +1,6 @@
 ## 3. Code Format
 
-> **Summary**: Tab=8 chars; line width ≤80; Allman braces (all on new line); space after keywords, not after sizeof; `*` near variable name; case aligned with switch.
+> **Summary**: Tab=8 chars; line width ≤100; Allman braces (all on new line); space after keywords, not after sizeof; `*` near variable name; case aligned with switch.
 
 ### 3.1 Indentation
 
@@ -8,11 +8,11 @@
 
 ### 3.2 Line Width
 
-**80 columns, hard limit.** Break long statements at logical points. Exception: user-visible strings (don't break, hard to grep).
+**100 columns, hard limit.** Break long statements at logical points. Exception: user-visible strings (don't break, hard to grep).
 
 ```c
 int serial_register_driver(
-        const serial_drv_t *p_drv,
+        const struct serial_drv *p_drv,
         const char *p_name)
 {
         ...
@@ -95,7 +95,22 @@ extern "C" {
 
 ### 3.7 Function Design
 
+**Single responsibility — a function does one thing and one thing well.** If you need "and" to describe what it does ("parses JSON and writes to serial"), split it.
+
+Signs a function is doing too much:
+- Over 50 lines
+- Local variables >10
+- Deep nesting (3+ levels)
+- Mixed concerns (e.g. hardware I/O + data parsing)
+
 - Short functions, one purpose each
-- Max ~24 visible lines (80x24 terminal)
-- Local variables: ≤10
+- Max ~24 visible lines (100x24 terminal)
+- Separate logic from I/O — pure data functions are testable, hardware functions are not
 - Prefer inline functions over macros (only if ≤3 lines)
+- **Explicit input/output contract** — mark input pointers `const`, name output parameters `_out`, never use the same pointer as both
+
+```c
+/* clear contract: buf is input, result is output */
+int parse_frame(const uint8_t *buf, size_t len, int *result_out);
+/*           input ---------------   input --   output --------- */
+```
